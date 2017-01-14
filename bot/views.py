@@ -79,6 +79,19 @@ SIGNOUT_RESPONSES = ["Bbye buddy! See ya :D",
                     "Saiyonaara !!",
                     ]
 
+
+quotes = [  "Be happy for this moment. This moment is your life.",
+            "The most important thing is to enjoy your life - to be happy - it's all that matters.",
+            "I just find myself happy with the simple things. Appreciating the blessings God gave me.",
+            "The best preparation for tomorrow is doing your best today.",
+            "Put your heart, mind, and soul into even your smallest acts. This is the secret of success.",
+            "Keep your face always toward the sunshine - and shadows will fall behind you.",
+            "Friends show their love in times of trouble, not in happiness.",
+            "The greatest gift of life is friendship, and I have received it.",
+            "There is nothing on this earth more to be prized than true friendship."
+            ]
+
+
 def check_for_greetings(parsed):
 
     for word in parsed.words:
@@ -358,6 +371,7 @@ def find_candidate_parts_of_speech(parsed):
 # # end
 
 
+
 def post_facebook_message(fbid, recieved_message):           
 
 
@@ -371,6 +385,15 @@ def post_facebook_message(fbid, recieved_message):
     post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
     response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":send_text}})
     status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
+
+    #Random quotes in between
+    quote_probability = random.randint(0, 100)/100
+    if quote_probability > 0.7 :
+        send_text = "Always stay happy and read this quote :)"
+        response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":send_text}})
+        status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
+        response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":random.choice(quotes)}})
+        status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
     # if flag == "overhead_message":
     #     flag = ''
     #     response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":"""Type 'quotes' to get some quotes or 'jokes' to get cracked up"""}})
