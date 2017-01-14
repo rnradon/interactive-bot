@@ -141,11 +141,11 @@ def find_pronoun(sent):
         # Disambiguate pronouns
         if part_of_speech == 'PRP' and word.lower() == 'you':
             # pronoun = 'I' +++++++++ORIGINAL++++++++++++
-            pronoun = 'I am, '
+            pronoun = 'I'
         elif part_of_speech == 'PRP' and word == 'I':
             # If the user mentioned themselves, then they will definitely be the pronoun
             # pronoun = 'You' +++++++++ORIGINAL++++++++++++
-            pronoun = 'You better, '
+            pronoun = 'You'
     return pronoun
 # end
 
@@ -203,7 +203,7 @@ def construct_response(pronoun, noun, verb):
     if verb:
         verb_word = verb[0]
         if verb_word in ('be', 'am', 'is', "'m"):  # This would be an excellent place to use lemmas!
-            if pronoun.lower() == 'you':
+            if pronoun.lower() == 'You':
                 # The bot will always tell the person they aren't whatever they said they were
                 resp.append("aren't really")
             else:
@@ -224,6 +224,7 @@ def check_for_comment_about_bot(pronoun, noun, adjective):
     that feels right based on their input. Returns the new best sentence, or None."""
     resp = None
     if pronoun == 'I' and (noun or adjective):
+        pprint("WORRRRRRRRRRKING")
         if noun:
             if random.choice((True, False)):
                 resp = random.choice(SELF_VERBS_WITH_NOUN_CAPS_PLURAL).format(**{'noun': noun.pluralize().capitalize()})
@@ -273,6 +274,8 @@ def respond(sentence):
     """Parse the user's inbound sentence and find candidate terms that make up a best-fit response"""
     cleaned = preprocess_text(sentence)
     parsed = TextBlob(cleaned)
+    pprint("POSITION Tags")
+    pprint(parsed.pos_tags)
 
     # Loop through all the sentences, if more than one. This will help extract the most relevant
     # response text even across multiple sentences (for example if there was no obvious direct noun
